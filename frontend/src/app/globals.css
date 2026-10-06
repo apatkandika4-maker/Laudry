@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: #f5f7fb;
+  color: #0f172a;
+}
+
+/* Sembunyikan panah input angka */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes pop-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slide-in-left {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+.animate-fade-in { animation: fade-in 0.15s ease-out; }
+.animate-pop-in { animation: pop-in 0.18s ease-out; }
+.animate-toast-in { animation: toast-in 0.2s ease-out; }
+.animate-slide-in-left { animation: slide-in-left 0.2s ease-out; }
+
+/* ------------------------------------------------------------------ */
+/* Cetak struk (thermal 58mm). Hanya .receipt-print-root yang dicetak. */
+/* ------------------------------------------------------------------ */
+.receipt-print-root {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: 58mm auto;
+    margin: 2mm;
+  }
+  html,
+  body {
+    background: #fff !important;
+  }
+  body > * {
+    display: none !important;
+  }
+  body > .receipt-print-root {
+    display: block !important;
+    width: 54mm;
+    color: #000;
+  }
+}
