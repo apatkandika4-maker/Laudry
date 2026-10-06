@@ -1,14 +1,12 @@
-# Blueprint Render: backend Laravel + database Postgres (plan free).
+# Blueprint Render: backend Laravel + database SQLite (plan free, TANPA kartu kredit).
 # Cara pakai: Render -> New -> Blueprint -> pilih repo ini.
 # Setelah dibuat, isi di dashboard service "laudry-api" (env sync:false):
 #   APP_KEY   -> hasil "php artisan key:generate --show" (format base64:....)
 #   APP_URL   -> URL backend Render, mis. https://laudry-api.onrender.com
 #   FRONTEND_URL -> URL frontend Vercel, mis. https://laundry-kamu.vercel.app
-databases:
-  - name: laudry-db
-    plan: free
-    databaseName: laundry
-    user: laundry
+#
+# Catatan: database SQLite disimpan sebagai file. Pada plan gratis, file bisa
+# ter-reset setiap kali deploy ulang. Cocok untuk demo/portofolio.
 
 services:
   - type: web
@@ -41,28 +39,8 @@ services:
         value: file
       - key: QUEUE_CONNECTION
         value: sync
-      # Database Postgres diisi otomatis dari laudry-db di atas.
+      # Database SQLite (file). Tidak butuh database terpisah / kartu kredit.
       - key: DB_CONNECTION
-        value: pgsql
-      - key: DB_HOST
-        fromDatabase:
-          name: laudry-db
-          property: host
-      - key: DB_PORT
-        fromDatabase:
-          name: laudry-db
-          property: port
+        value: sqlite
       - key: DB_DATABASE
-        fromDatabase:
-          name: laudry-db
-          property: database
-      - key: DB_USERNAME
-        fromDatabase:
-          name: laudry-db
-          property: user
-      - key: DB_PASSWORD
-        fromDatabase:
-          name: laudry-db
-          property: password
-      - key: DB_SSLMODE
-        value: require
+        value: /app/database/database.sqlite

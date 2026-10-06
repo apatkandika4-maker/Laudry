@@ -2,6 +2,14 @@
 # Skrip start untuk Render. Menyiapkan DB lalu menjalankan server.
 set -e
 
+# Pastikan file database SQLite ada (dipakai pada plan gratis Render).
+if [ "${DB_CONNECTION:-sqlite}" = "sqlite" ]; then
+  DB_FILE="${DB_DATABASE:-/app/database/database.sqlite}"
+  mkdir -p "$(dirname "$DB_FILE")"
+  touch "$DB_FILE"
+  chmod -R ug+rw "$(dirname "$DB_FILE")" || true
+fi
+
 # Bersihkan cache lama, lalu cache config/route untuk performa produksi.
 php artisan config:clear || true
 php artisan config:cache || true

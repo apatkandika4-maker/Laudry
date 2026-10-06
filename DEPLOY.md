@@ -10,6 +10,10 @@ dari HP mana saja.
 
 > Catatan paket gratis: backend Render "tidur" bila 15 menit tak dipakai, jadi
 > buka pertama bisa lambat ~30 detik. Cocok untuk demo/portofolio, bukan data penting.
+>
+> Database memakai SQLite (file) supaya TIDAK perlu kartu kredit. Datanya bisa
+> ter-reset setiap deploy ulang — aman untuk demo. Kalau form "Add Card" muncul,
+> klik Cancel; blueprint ini tidak lagi butuh database berbayar.
 
 ---
 
@@ -18,8 +22,8 @@ dari HP mana saja.
 1. Buka https://render.com, daftar/masuk pakai akun GitHub.
 2. Klik **New +** -> **Blueprint**.
 3. Pilih repository **Laudry**. Render otomatis membaca file `render.yaml`
-   dan menyiapkan 2 hal: database `laudry-db` dan service `laudry-api`.
-4. Klik **Apply**. Tunggu database selesai dibuat.
+   dan menyiapkan service `laudry-api` (pakai SQLite, tanpa database terpisah).
+4. Klik **Apply**. (Kalau diminta "Add Card", klik **Cancel** — tidak diperlukan.)
 5. Buka service **laudry-api** -> tab **Environment**, isi 3 variabel ini
    (lainnya sudah otomatis):
 
