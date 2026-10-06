@@ -1,5 +1,5 @@
-# Backend Laravel untuk hosting gratis Render (plan free, Docker).
-# Build: composer install. Start: migrate lalu serve di $PORT Render.
+# Backend Laravel untuk hosting Render (plan free, Docker).
+# Build: composer install. Start: migrate (+ seed sekali) lalu serve di $PORT Render.
 FROM php:8.3-cli
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -12,6 +12,10 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /app
 COPY . .
 RUN composer install --no-dev --optimize-autoloader --no-interaction \
+    && chmod -R ug+rw storage bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache
 
-CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
+COPY docker-start.sh /usr/local/bin/docker-start.sh
+RUN chmod +x /usr/local/bin/docker-start.sh
+
+CMD ["/usr/local/bin/docker-start.sh"]

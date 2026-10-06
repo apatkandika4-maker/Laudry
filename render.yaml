@@ -1,6 +1,15 @@
-# Blueprint Render: deploy backend Laravel dari repo ini (plan free).
-# Cara pakai: Render → New → Blueprint → pilih repo Laudry.
-# Isi env sync:false di dashboard: APP_URL, FRONTEND_URL, APP_KEY, DB_*.
+# Blueprint Render: backend Laravel + database Postgres (plan free).
+# Cara pakai: Render -> New -> Blueprint -> pilih repo ini.
+# Setelah dibuat, isi di dashboard service "laudry-api" (env sync:false):
+#   APP_KEY   -> hasil "php artisan key:generate --show" (format base64:....)
+#   APP_URL   -> URL backend Render, mis. https://laudry-api.onrender.com
+#   FRONTEND_URL -> URL frontend Vercel, mis. https://laundry-kamu.vercel.app
+databases:
+  - name: laudry-db
+    plan: free
+    databaseName: laundry
+    user: laundry
+
 services:
   - type: web
     name: laudry-api
@@ -8,31 +17,52 @@ services:
     rootDir: backend
     dockerfilePath: ./Dockerfile
     plan: free
-    healthCheckPath: /
+    healthCheckPath: /up
     envVars:
+      - key: APP_NAME
+        value: "Kasir Laundry"
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
         value: false
+      - key: APP_TIMEZONE
+        value: Asia/Jakarta
+      - key: LOG_LEVEL
+        value: info
+      - key: APP_KEY
+        sync: false
       - key: APP_URL
         sync: false
       - key: FRONTEND_URL
         sync: false
-      - key: APP_KEY
-        sync: false
-      - key: LOG_LEVEL
-        value: info
+      - key: SESSION_DRIVER
+        value: file
+      - key: CACHE_STORE
+        value: file
+      - key: QUEUE_CONNECTION
+        value: sync
+      # Database Postgres diisi otomatis dari laudry-db di atas.
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_HOST
-        sync: false
+        fromDatabase:
+          name: laudry-db
+          property: host
       - key: DB_PORT
-        value: 5432
+        fromDatabase:
+          name: laudry-db
+          property: port
       - key: DB_DATABASE
-        sync: false
+        fromDatabase:
+          name: laudry-db
+          property: database
       - key: DB_USERNAME
-        sync: false
+        fromDatabase:
+          name: laudry-db
+          property: user
       - key: DB_PASSWORD
-        sync: false
+        fromDatabase:
+          name: laudry-db
+          property: password
       - key: DB_SSLMODE
         value: require

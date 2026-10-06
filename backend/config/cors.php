@@ -16,11 +16,13 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [
-        env('FRONTEND_URL', 'http://localhost:3000'),
-    ],
+    'allowed_origins' => array_values(array_filter(array_map('trim', explode(
+        ',',
+        env('FRONTEND_URL', 'http://localhost:3000')
+    )))),
 
-    'allowed_origins_patterns' => [],
+    // Izinkan semua subdomain preview Vercel (mis. laundry-abc123.vercel.app).
+    'allowed_origins_patterns' => ['#^https://.*\.vercel\.app$#'],
 
     'allowed_headers' => ['*'],
 
